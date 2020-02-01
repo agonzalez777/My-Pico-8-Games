@@ -79,10 +79,8 @@ function draw_train()
 end
 
 function change_switch_state()
-	if (switch==0) then
-		music(0)
-	end
 	if btnp(up) then
+		if (switch == 0) then music(0) end
 		switch += 1
 		if (switch > 4) then	
 			switch = 4
@@ -90,12 +88,10 @@ function change_switch_state()
 	end
 	if btnp(down) then
 		switch -= 1
-		if (switch < 0) then
+		if (switch <= 0) then
 			switch=0
+			music(-1)
 		end
-	end
-	if (switch==0) then
-		music(-1)
 	end
 	speed = switch
 end

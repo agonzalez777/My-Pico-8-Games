@@ -32,24 +32,27 @@ function draw_board(brd)
     end
 end
 
+function generate_random_seed(percent) 
+    for i=1,(flr(board_width*board_height*(percent/100))) do
+        xrand=flr(rnd(board_width)+1)
+        yrand=flr(rnd(board_height)+1) 
+        boards[board_index][xrand][yrand] = 1
+    end
+end
+
+function generate_pentomino()
+    boards[1][60][64] = 1
+    boards[1][60][65] = 1
+    boards[1][61][63] = 1
+    boards[1][61][64] = 1
+    boards[1][62][64] = 1
+end
+
 function _init()
 -- Initialize the Board with all dead cells
     reset_board(boards[1])
     reset_board(boards[2])
--- Randomly Select about 5% of the Board to Populate with live cells
---[[    local i = 1
-    for i=1,(flr(board_width*board_height*.05)) do
-        xrand=flr(rnd(board_width)+1)
-        yrand=flr(rnd(board_height)+1) 
-        boards[1][xrand][yrand] = 1
-    end]]
--- draw an r pentomino
-boards[1][60][64] = 1
-boards[1][60][65] = 1
-boards[1][61][63] = 1
-boards[1][61][64] = 1
-boards[1][62][64] = 1
-
+    generate_random_seed(5)
 end
 
 function calculate_next_board() 
@@ -90,10 +93,6 @@ function count_neighbors(brd,x,y)
     return ncount
 end
 
-function _update()
-    
-end
-
 
 function _draw()
     draw_board(boards[board_index])    
@@ -101,6 +100,6 @@ function _draw()
     x = board_index
     board_index = next_board_index
     next_board_index = x
-    print("Generation: "..generation,0,115)
+    print("Generation: "..generation,0,120)
     generation+=1
 end

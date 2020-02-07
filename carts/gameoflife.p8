@@ -4,13 +4,17 @@ __lua__
 left,right,up,down,fire1,fire2=0,1,2,3,4,5
 black,dark_blue,dark_purple,dark_green,brown,dark_gray,light_gray,white,red,orange,yellow,green,blue,indigo,pink,peach=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 
-board_width = 128
-board_height = 128
+
+cell_size = 2 -- Must be a factor of 128
+board_width = 128/cell_size
+board_height = 128/cell_size
 alive_color = white
 generation = 0
 boards = {{}, {}}
 board_index=1
 next_board_index=2
+
+-- Reset Board to all Dead Cells
 function reset_board(brd) 
     for i=1,board_width do
         brd[i]={}
@@ -20,14 +24,25 @@ function reset_board(brd)
     end
 end
 
+-- Draw the Board
 function draw_board(brd)
     cls()
     local i = 1
     for i=1,board_width do
         for j=1,board_height do
                 if (brd[i][j] == 1) then
-                    pset(i,j,white)
+                    draw_cell(i+(i*(cell_size-1)),j+(j*(cell_size-1)),cell_size,white)
                 end    
+        end
+    end
+end
+
+
+function draw_cell(x,y,size,color)
+    local i,j
+    for i = 0,size-1 do
+        for j=0,size-1 do
+            pset(x+i,y+j,color)
         end
     end
 end
@@ -41,18 +56,19 @@ function generate_random_seed(percent)
 end
 
 function generate_pentomino()
-    boards[1][60][64] = 1
-    boards[1][60][65] = 1
-    boards[1][61][63] = 1
-    boards[1][61][64] = 1
-    boards[1][62][64] = 1
+    boards[1][56/cell_size][64/cell_size] = 1
+    boards[1][56/cell_size][64/cell_size+1] = 1
+    boards[1][56/cell_size+1][64/cell_size-1] = 1
+    boards[1][56/cell_size+1][64/cell_size] = 1
+    boards[1][56/cell_size+2][64/cell_size] = 1
 end
 
 function _init()
 -- Initialize the Board with all dead cells
     reset_board(boards[1])
     reset_board(boards[2])
-    generate_random_seed(5)
+    --generate_random_seed(5)
+    generate_pentomino()
 end
 
 function calculate_next_board() 

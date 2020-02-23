@@ -97,10 +97,6 @@ end
 
 -- Draw Functions
 function _draw()
-    if (not user_control) then
-        calculate_next_board()
-        goto_next_board()
-    end
     draw_board(boards[board_index])    
     draw_status_bar()
     draw_cursor(cursor_location.x,cursor_location.y,cell_size,red)
@@ -109,7 +105,7 @@ end
 -- Draw the Status Bar
 function draw_status_bar() 
     rectfill(0,121,128,128,white)
-    print("Gen:"..generation.." X-next Z-"..status_user_control,0,122,black)
+    print("Gen:"..generation.." X-Next Z-Insert",0,122,black)
 end
 
 function draw_cursor(x,y,size,color)
@@ -157,7 +153,7 @@ function get_input()
             end
         end
         if (btnp(fire1)) then
-            user_control = not user_control
+            -- Input Enemy Cell
         end
         if (btnp(up)) then
             cursor_location.y -= 1

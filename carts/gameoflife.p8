@@ -125,6 +125,9 @@ function draw_board(brd)
         for j=0,board_height-1 do
                 if (brd[i+1][j+1] == 1) then
                     draw_cell(i+(i*(cell_size-1)),j+(j*(cell_size-1)),cell_size,white)
+                end  
+                if (brd[i+1][j+1] == 2) then
+                    draw_cell(i+(i*(cell_size-1)),j+(j*(cell_size-1)),cell_size,red)
                 end    
         end
     end
@@ -153,7 +156,7 @@ function get_input()
             end
         end
         if (btnp(fire1)) then
-            -- Input Enemy Cell
+            boards[board_index][cursor_location.x][cursor_location.y] = 2
         end
         if (btnp(up)) then
             cursor_location.y -= 1

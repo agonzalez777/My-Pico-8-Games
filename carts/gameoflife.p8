@@ -62,36 +62,50 @@ function calculate_next_board()
     local j = 1
     for i=1,board_width do
         for j=1,board_height do
-            local count = count_neighbors(boards[board_index],i,j)
-            if (boards[board_index][i][j] == 1 and (count == 2 or count == 3)) then
+            local count_white = count_neighbors(boards[board_index],i,j,1)
+            local count_red = count_neighbors(boards[board_index],i,j,2)
+            local total_count = count_white+count_red
+           
+            -- Conflict Resolution
+            if (boards[board_index][i][j] == 2 and count_white > count_red) then
                 boards[next_board_index][i][j] = 1
-            elseif (boards[board_index][i][j]==0 and count==3) then
-                boards[next_board_index][i][j] = 1
-            else 
+            elseif (boards[board_index][i][j] == 1 and count_red > count_white) then
+                boards[next_board_index][i][j] = 2
+            -- White Turn
+            elseif (boards[board_index][i][j] == 1 and (count_white == 2 or count_white == 3)) then
+                    boards[next_board_index][i][j] = 1
+            elseif (boards[board_index][i][j]==0 and count_white==3) then
+                boards[next_board_index][i][j] = 1    
+            -- Red Turn
+            elseif (boards[board_index][i][j] == 2 and (count_red == 2 or count_red == 3)) then
+                    boards[next_board_index][i][j] = 2
+            elseif (boards[board_index][i][j]==0 and count_red==3) then
+                boards[next_board_index][i][j] = 2
+            else
                 boards[next_board_index][i][j] = 0
             end
         end
     end
 end
 
-function count_neighbors(brd,x,y)
+function count_neighbors(brd,x,y,type)
     local ncount = 0
     -- to the west
-    if (x>1 and brd[x-1][y] == 1) then ncount+=1 end
+    if (x>1 and brd[x-1][y] == type) then ncount+=1 end
     -- to the northwest
-    if (x>1 and y>1 and brd[x-1][y-1] == 1) then ncount+=1 end
+    if (x>1 and y>1 and brd[x-1][y-1] == type) then ncount+=1 end
     -- to the north
-    if (y>1 and brd[x][y-1] == 1) then ncount+=1 end
+    if (y>1 and brd[x][y-1] == type) then ncount+=1 end
     -- to the northeast
-    if (x<board_width and y>1 and brd[x+1][y-1] == 1) then ncount+=1 end
+    if (x<board_width and y>1 and brd[x+1][y-1] == type) then ncount+=1 end
     -- to the east
-    if (x<board_width and brd[x+1][y] == 1) then ncount+=1 end
+    if (x<board_width and brd[x+1][y] == type) then ncount+=1 end
     -- to the southeast
-    if (x<board_width and y<board_height and brd[x+1][y+1] == 1) then ncount+=1 end
+    if (x<board_width and y<board_height and brd[x+1][y+1] == type) then ncount+=1 end
     -- to the south
-    if (y<board_height and brd[x][y+1] == 1) then ncount+=1 end
+    if (y<board_height and brd[x][y+1] == type) then ncount+=1 end
     -- to the southwest
-    if (x>1 and y<board_height and brd[x-1][y+1] == 1) then ncount+=1 end
+    if (x>1 and y<board_height and brd[x-1][y+1] == type) then ncount+=1 end
     return ncount
 end
 
